@@ -19,6 +19,8 @@ ChOma is a simple library for parsing and manipulating MachO files and their CMS
 
 `INSTALL_PATH=/some/path`: Path where ChOma gets installed to when using `make install`
 
+`ldid -Sentitlements.xml output/ios/tests/ct_bypass`
+
 ## Usage
 
 To use the library, you can compile with `make all`. This will produce `libchoma.a` and `libchoma.dylib`, which can be linked to your own project, as well as multiple test binaries:
