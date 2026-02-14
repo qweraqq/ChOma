@@ -552,7 +552,7 @@ int apply_coretrust_bypass(const char *machoPath, char *teamID, char *identifier
     free(encodedSuperblobUnsigned);
 
     printf("Updating code slot hashes...\n");
-    csd_code_directory_update(realCodeDirBlob, macho);
+    csd_code_directory_update_code_slots(realCodeDirBlob, macho);
 
     printf("Signing binary...\n");
     ret = update_signature_blob(decodedSuperblob, appStoreSigBlob, appStoreSigBlobLen);

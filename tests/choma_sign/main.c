@@ -79,7 +79,7 @@ int sign_macho(MachO *macho, const char *entitlements, char *teamID, char *ident
     if (xmlEntitlements) csd_superblob_append_blob(decodedSuperblob, xmlEntitlements);
     if (derEntitlements) csd_superblob_append_blob(decodedSuperblob, derEntitlements);
 
-    csd_code_directory_update(codeDir, macho);
+    csd_code_directory_update_code_slots(codeDir, macho);
     csd_code_directory_update_special_slots(codeDir, xmlEntitlements, derEntitlements, NULL);
     csd_code_directory_print_content(codeDir, macho, true, false);
 
