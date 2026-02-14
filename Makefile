@@ -17,9 +17,9 @@ INSTALL_PATH ?= /usr/local/
 ifeq ($(TARGET), ios)
 BUILD_DIR := build/ios
 OUTPUT_DIR := output/ios
-CFLAGS += -arch arm64 -arch arm64e -isysroot $(shell xcrun --sdk iphoneos --show-sdk-path) -miphoneos-version-min=11.0
+CFLAGS += -arch arm64 -isysroot $(shell xcrun --sdk iphoneos --show-sdk-path) -miphoneos-version-min=11.0
 ifeq ($(DISABLE_SIGNING), 0)
-CFLAGS += external/ios/libcrypto.a
+CFLAGS += external/ios/libcrypto.3.dylib
 endif
 else
 BUILD_DIR := build
@@ -70,6 +70,9 @@ ifeq ($(TARGET), ios)
 $(DYNAMIC_LIB): $(OBJ_FILES)
 	@mkdir -p $(LIB_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(DYLIB_LDFLAGS) -shared -o $@ $^
+ifeq ($(DISABLE_SIGNING), 0)
+	install_name_tool -change "@rpath/libcrypto.3.dylib" "@executable_path/libcrypto.3.dylib" $@
+endif
 	@ldid -S $@
 else
 $(DYNAMIC_LIB): $(OBJ_FILES)
@@ -87,6 +90,9 @@ $(TESTS_OUTPUT_DIR)/%: $(TESTS_SRC_DIR)/%
 	@mkdir -p $(dir $@)
 	@rm -rf $@
 	$(CC) $(CFLAGS) $(LDFLAGS) -I$(OUTPUT_DIR)/include -o $@ $</*.c $(OUTPUT_DIR)/lib/libchoma.a
+ifeq ($(DISABLE_SIGNING), 0)
+	install_name_tool -change "@rpath/libcrypto.3.dylib" "@executable_path/libcrypto.3.dylib" $@
+endif
 	@ldid -Sexternal/ios/entitlements.plist $@
 else
 $(TESTS_OUTPUT_DIR)/%: $(TESTS_SRC_DIR)/%
